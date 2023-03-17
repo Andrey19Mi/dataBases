@@ -20,9 +20,9 @@ FROM student s
 WHERE s.avg_score = 4 OR s.avg_score = 4.01 OR s.avg_score = 4.02 OR s.avg_score = 4.03 OR s.avg_score = 4.04 OR s.avg_score = 4.05 OR s.avg_score = 4.06 OR s.avg_score = 4.07 OR s.avg_score = 4.08 OR s.avg_score = 4.09 OR s.avg_score = 4.10 OR s.avg_score = 4.11 OR s.avg_score = 4.12 OR s.avg_score = 4.13 OR s.avg_score = 4.14 OR s.avg_score = 4.15 OR s.avg_score = 4.16 OR s.avg_score = 4.17 OR s.avg_score = 4.18 OR s.avg_score = 4.19 OR s.avg_score = 4.20 OR s.avg_score = 4.21 OR s.avg_score = 4.22 OR s.avg_score = 4.23 OR s.avg_score = 4.24 OR s.avg_score = 4.25 OR s.avg_score = 4.26 OR s.avg_score = 4.27 OR s.avg_score = 4.28 OR s.avg_score = 4.29 OR s.avg_score = 4.30 OR s.avg_score = 4.31 OR s.avg_score = 4.32 OR s.avg_score = 4.33 OR s.avg_score = 4.34 OR s.avg_score = 4.35 OR s.avg_score = 4.36 OR s.avg_score = 4.37 OR s.avg_score = 4.38 OR s.avg_score = 4.39 OR s.avg_score = 4.40 OR s.avg_score = 4.41 OR s.avg_score = 4.42 OR s.avg_score = 4.43 OR s.avg_score = 4.44 OR s.avg_score = 4.45 OR s.avg_score = 4.46 OR s.avg_score = 4.47 OR s.avg_score = 4.48 OR s.avg_score = 4.49 OR s.avg_score = 4.50;
 
 --task 2.1.2
-SELECT s.student_name, s.surname
+SELECT s.*
 FROM student s
-WHERE s.avg_score BETWEEN 4 AND 4.51;
+WHERE num_group::varchar LIKE '2%'
 
 --task 2.1.3
 
@@ -100,7 +100,7 @@ FROM student s
 GROUP BY s.surname;
 
 --task 2.2.4
-SELECT EXTRACT(YEAR FROM s.date_birth), COUNT(EXTRACT(YEAR FROM s.date_birth))
+SELECT EXTRACT(YEAR FROM s.date_birth), COUNT(*)
 FROM student s
 GROUP BY EXTRACT(YEAR FROM s.date_birth);
 
@@ -112,17 +112,20 @@ GROUP BY SUBSTRING(s.num_group::varchar, 1, 1);
 --task 2.2.6
 SELECT s.num_group, MAX(s.avg_score)
 FROM student s
+WHERE s.num_group LIKE ''
+GROUP BY s.num_group;
+
+SELECT s.num_group, MAX(s.avg_score)
+FROM student s
 WHERE SUBSTRING(s.num_group::varchar, 1, 1) = '4'
 GROUP BY s.num_group;
 
 --task 2.2.7
-SELECT t.num_group, t.avg_score
-FROM (SELECT s.num_group, AVG(s.avg_score) as avg_score
-	FROM student s
-	GROUP BY s.num_group
-	) t
-WHERE t.avg_score <= 3.5
-ORDER BY t.avg_score;
+SELECT s.num_group, AVG(s.avg_score) as avg_score1
+FROM student s
+GROUP BY s.num_group
+HAVING AVG(s.avg_score) <= 3.5
+ORDER BY avg_score1
 
 --task 2.2.8
 SELECT s.num_group, COUNT(s.record_book) AS students, MAX(s.avg_score) AS max_score,
