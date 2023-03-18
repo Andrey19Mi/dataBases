@@ -110,15 +110,12 @@ FROM student s
 GROUP BY SUBSTRING(s.num_group::varchar, 1, 1);
 
 --task 2.2.6
-SELECT s.num_group, MAX(s.avg_score)
+SELECT s.num_group, MAX(s.avg_score) as max_avg
 FROM student s
-WHERE s.num_group LIKE ''
-GROUP BY s.num_group;
-
-SELECT s.num_group, MAX(s.avg_score)
-FROM student s
-WHERE SUBSTRING(s.num_group::varchar, 1, 1) = '4'
-GROUP BY s.num_group;
+WHERE SUBSTRING(s.num_group::varchar, 1, 1) = '2'
+GROUP BY s.num_group
+ORDER BY max_avg DESC
+LIMIT 1;
 
 --task 2.2.7
 SELECT s.num_group, AVG(s.avg_score) as avg_score1
