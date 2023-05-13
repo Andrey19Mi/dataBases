@@ -118,21 +118,21 @@ FROM student as s JOIN stud_hobby as sh
 WHERE (s.avg_score between 2.5 and 3.5) AND s.num_group::text like '2%'
 
 --task10
-SELECT s.num_group
+SELECT substr(s.num_group::text,1,1)
 FROM student as s JOIN stud_hobby as sh 
 		ON s.record_book = sh.record_book 
 		JOIN hobby as h
 		ON sh.hobby_id = h.hobby_id,
-		(SELECT s.num_group, COUNT(s.num_group)
+		(SELECT substr(s.num_group::text,1,1), COUNT(s.num_group)
 		 FROM student as s JOIN stud_hobby as sh 
 				ON s.record_book = sh.record_book 
 		 WHERE sh.date_finish IS NOT NULL
-		 GROUP BY num_group) t,
-		(SELECT s.num_group, COUNT(s.num_group)
+		 GROUP BY substr(s.num_group::text,1,1)) t,
+		(SELECT substr(s.num_group::text,1,1), COUNT(s.num_group)
 		 FROM student s 
-		 GROUP BY num_group) t2
-WHERE t.num_group = s.num_group AND t.num_group = t2.num_group AND t.count >= t2.count/2
-GROUP BY s.num_group
+		 GROUP BY substr(s.num_group::text,1,1)) t2
+WHERE t.substr = substr(s.num_group::text,1,1) AND t.substr = t2.substr AND t.count >= t2.count/2
+GROUP BY substr(s.num_group::text,1,1)
 
 --task11
 SELECT s.num_group
@@ -148,11 +148,11 @@ WHERE t.num_group = t2.num_group AND t2.num_group = s.num_group AND t.count >= t
 GROUP BY s.num_group
 
 --task12
-SELECT s.num_group, COUNT(DISTINCT hobby_id) 
+SELECT substr(s.num_group::text,1,1), COUNT(DISTINCT hobby_id) 
 FROM student as s JOIN stud_hobby as sh 
 		ON s.record_book = sh.record_book 
-WHERE sh.date_finish IS NOT NULL
-GROUP BY num_group
+WHERE sh.date_finish IS NULL
+GROUP BY substr(s.num_group::text,1,1)
 
 --task13
 SELECT s.record_book, s.surname, s.student_name, s.date_birth, substring(s.num_group::text, 1,1)
